@@ -1,0 +1,146 @@
+
+    <body>
+
+    <style> 
+
+    #canvas {
+
+    border: solid 1px lightgray;
+  }
+
+   </style>
+
+  <canvas id="canvas" width="500" height="400"></canvas>
+
+
+
+   <script>
+
+
+
+  const canvas = document.getElementById("canvas");
+  const context = canvas.getContext("2d");
+
+
+   
+  const rand = function(n) {
+
+     return Math.floor((Math.random() * n) + 1);
+
+    };
+
+  const colors = ["#800080", "#DDA0DD", "#DA70D6", "#C71585", "#D8BFD8", "#EE82EE"]
+
+  const createPoints = function(count, canvasWidth, CanvasHeight) {
+
+      const Array = [];
+
+      const f = function(i) {
+
+        if(i===count) {
+
+          return;
+        }
+
+
+        Array[i] = {
+
+          x: rand(canvas.width),
+          y: rand(canvas.height),
+          width: 30,
+          height: 30,
+          xDelta: 1,
+          yDelta: 1,
+          color: colors[rand(6)-1]
+
+        };
+
+          return f(i + 1);
+
+      };
+
+          f(0)
+          return Array; 
+  };
+
+  const forEach = function(x, y) { 
+
+      const hlp = function(z) {
+
+
+        if(z === x.length)
+          
+            return;
+
+           y(x[z]);
+           hlp(z + 1);
+      };
+
+      hlp(0);
+  };
+
+
+  const main = createPoints(15, canvas.width, canvas.height)
+
+
+   const update = function() { 
+
+    forEach(main, function(point) {
+
+              point.x += point.xDelta;
+              point.y += point.yDelta;
+
+            if(point.x>=canvas.width-point.width) {
+              point.xDelta = -1
+            }
+
+            else if (point.x <=0) {
+              point.xDelta = 1;
+              }
+
+            if(point.y >=canvas.height-point.height) {
+            point.yDelta = -1
+    }
+
+            else if (point.y <=0) {
+            point.yDelta = 1
+    }
+
+           });
+       };
+
+  
+  const draw = function() {
+
+
+   context.clearRect(0, 0, canvas.width, canvas.height);
+
+        forEach(main, function(point) {
+
+
+          context.fillStyle = point.color;
+          context.fillRect(point.x, point.y, point.width, point.height);
+        });
+
+    };
+
+
+
+ 
+ const loop = function() { 
+      
+        update();
+        draw();
+        requestAnimationFrame(loop);
+
+     };
+
+    loop();
+
+            
+  
+    </script>    
+
+  
+    
+    </body>
